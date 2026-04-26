@@ -1,0 +1,8 @@
+{
+    "Post": true,
+    "Category": true,
+    "Tag": true,
+    "Menu": true,
+    "RRDR": false,
+    "Content": true
+}
