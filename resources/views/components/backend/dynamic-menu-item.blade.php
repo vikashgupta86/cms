@@ -1,8 +1,12 @@
 @props(['item', 'optimized' => false])
+ 
 
 @php
+
+
     // If optimized mode, skip permission checks as they're already done in the parent query
     if (!$optimized) {
+         @dd($optimized);
         // Original permission check logic for non-optimized calls
         $permissions = [];
         if ($item->permissions && is_array($item->permissions)) {
@@ -21,7 +25,7 @@
                 }
             }
         }
-        
+       
         if (empty($permissions) && $item->roles && is_array($item->roles) && !empty($item->roles)) {
             $canSee = false;
             if (auth()->check()) {

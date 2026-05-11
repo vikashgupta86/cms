@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Menu extends BaseModel
 {
@@ -181,10 +182,12 @@ class Menu extends BaseModel
 
                 if (is_array($item->permissions)) {
                     foreach ($item->permissions as $permission) {
+                         Log::info($permission);
                         if ($user->can($permission)) {
                             return true;
                         }
                     }
+                     Log::info($permission."out side the loop");
                 }
 
                 return false;

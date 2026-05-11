@@ -4,5 +4,6 @@
     "Tag": true,
     "Menu": true,
     "RRDR": false,
-    "Content": true
+    "Content": true,
+    "ManageHomePage": true
 }

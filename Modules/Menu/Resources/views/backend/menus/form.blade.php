@@ -35,6 +35,8 @@
                 'frontend-header' => 'Frontend Header',
                 'frontend-footer' => 'Frontend Footer',
                 'admin-sidebar' => 'Admin Sidebar',
+                'homepage-section' => 'Homepage Section',
+                'custom' => 'Custom Location'
             ];
             ?>
             {{ html()->label($field_lable, $field_name)->class('form-label') }} {!! field_required($required) !!}
@@ -112,10 +114,6 @@
             $required = "";
             $select_options = [
                 'en' => 'English',
-                'es' => 'Spanish',
-                'fr' => 'French',
-                'de' => 'German',
-                'ar' => 'Arabic',
                 'hi' => 'Hindi'
             ];
             ?>

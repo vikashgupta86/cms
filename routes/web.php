@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\NotificationsController;
 use App\Http\Controllers\Backend\RolesController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController as BackendUserController;
+use App\Http\Controllers\Frontend\ShowContentController;
 use App\Http\Controllers\Frontend\UserController as FrontendUserController;
 use App\Http\Controllers\LanguageController;
 use App\Livewire\Frontend\Home;
@@ -15,7 +16,7 @@ use App\Livewire\Frontend\Users\ChangePassword;
 use App\Livewire\Frontend\Users\Profile;
 use App\Livewire\Frontend\Users\ProfileEdit;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Frontend\HomeController;
 /*
 *
 * Auth Routes
@@ -31,6 +32,10 @@ require __DIR__.'/auth.php';
 *
 * --------------------------------------------------------------------
 */
+//Show Content Route: 
+
+Route::get('/pages/{slug}',[ShowContentController::class,'index'])->name('show.content')->where('slug', '^(?!admin|livewire|laravel-filemanager|_debugbar).*$');
+
 
 // home route
 Route::livewire('home', Home::class)->name('home');
@@ -45,7 +50,9 @@ Route::livewire('terms', Terms::class)->name('terms');
 Route::livewire('privacy', Privacy::class)->name('privacy');
 
 Route::group(['as' => 'frontend.'], function () {
-    Route::livewire('/', Home::class)->name('index');
+
+Route::get('/',[HomeController::class,'home'])->name('index');
+    // Route::livewire('/', Home::class)->name('index');
 
     Route::group(['middleware' => ['auth']], function () {
         /*

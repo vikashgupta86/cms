@@ -117,11 +117,16 @@
                         {{-- Dynamic: Article --}}
                         @if($type === 'content')
                             <div>
-                                <label class="form-label">Body Content <span class="text-red-500">*</span></label>
+                                <label class="form-label">Body <span class="text-red-500">*</span></label>
+                                <p class="form-hint">Rich-text editor — HTML is fully supported. Use the toolbar above to format content.</p>
                                 <textarea wire:model="body" rows="10" class="form-textarea font-mono text-sm"
                                     placeholder="Enter HTML content here…"></textarea>
                                 @error('body') <p class="form-error">{{ $message }}</p> @enderror
                             </div>
+
+
+
+                            
                         @endif
 
                         {{-- Dynamic: File --}}

@@ -1,0 +1,13 @@
+{
+    "name": "ManageHomePage",
+    "alias": "managehomepage",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ManageHomePage\\Providers\\ManageHomePageServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

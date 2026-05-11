@@ -11,13 +11,9 @@
         'frontend-footer' => 'components.frontend.footer-menu-item',
         default => 'components.frontend.menu-item'
     };
-   
+    
     // Get cached menu data - this includes all processing and hierarchy building
     $processedMenus = Menu::getCachedMenuData($location, $user, $currentLocale);
-    
-   
- 
-    
 @endphp
 
 @if($processedMenus->isNotEmpty())

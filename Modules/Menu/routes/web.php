@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Menu\Http\Controllers\Backend\MenusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,8 @@ use Illuminate\Support\Facades\Route;
 *
 * --------------------------------------------------------------------
 */
+ Route::post('/editor/upload', [MenusController::class, 'upload'])
+     ->name('editor.upload');
 Route::group(['namespace' => '\Modules\Menu\Http\Controllers\Backend', 'as' => 'backend.', 'middleware' => ['web', 'auth', 'can:view_backend'], 'prefix' => 'admin'], function () {
     /*
     * These routes need view-backend permission
@@ -56,6 +59,10 @@ Route::group(['namespace' => '\Modules\Menu\Http\Controllers\Backend', 'as' => '
      */
     $module_name = 'menus';
     $controller_name = 'MenusController';
+   
+
+        //  Route::post("/editor/upload", ['as' => "editor.upload", 'uses' => "$controller_name@upload"]);
+
     Route::get("$module_name/index_list", ['as' => "$module_name.index_list", 'uses' => "$controller_name@index_list"]);
     Route::get("$module_name/index_data", ['as' => "$module_name.index_data", 'uses' => "$controller_name@index_data"]);
     Route::get("$module_name/trashed", ['as' => "$module_name.trashed", 'uses' => "$controller_name@trashed"]);

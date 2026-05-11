@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
+use Modules\ManageHomePage\Models\ManageHomePage;
 
 class MenuItem extends BaseModel
 {
@@ -14,6 +16,44 @@ class MenuItem extends BaseModel
     use SoftDeletes;
 
     protected $table = 'menu_items';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'menu_id',
+        'parent_id',
+        'name',
+        'url',
+        'route_name',
+        'route_parameters',
+        'type',
+        'locale',
+        'sort_order',
+        'icon',
+        'description',
+        'html_attributes',
+        'permissions',
+        'roles',
+        'custom_data',
+        'opens_new_tab',
+        'is_visible',
+        'is_active',
+        'content',
+        'files',
+        'body',
+        'slug',
+        'badge_text',
+        'badge_color',
+        'css_classes',
+        'status',
+        'meta_title',
+        'note',
+        'file',
+        'file_icon',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -31,6 +71,10 @@ class MenuItem extends BaseModel
             'opens_new_tab' => 'boolean',
             'is_visible' => 'boolean',
             'is_active' => 'boolean',
+            'content' => 'string',
+        'files' => 'string',
+        'body' => 'string',
+
         ];
     }
 
@@ -40,6 +84,11 @@ class MenuItem extends BaseModel
     public function menu(): BelongsTo
     {
         return $this->belongsTo(Menu::class);
+    }
+
+      public function homepageSection()
+    {
+        return $this->hasOne(ManageHomePage::class,'menu_id', 'id');
     }
 
     /**
@@ -240,12 +289,12 @@ class MenuItem extends BaseModel
         // Check permissions - user needs ANY of the required permissions (OR logic)
         if ($this->permissions && is_array($this->permissions) && ! empty($this->permissions)) {
             foreach ($this->permissions as $permission) {
+               
                 if ($user->can($permission)) {
                     return true; // User has at least one required permission
                 }
             }
-
-            return false; // User doesn't have any of the required permissions
+             return false; // User doesn't have any of the required permissions
         }
 
         // If no permissions specified, authenticated user can see it

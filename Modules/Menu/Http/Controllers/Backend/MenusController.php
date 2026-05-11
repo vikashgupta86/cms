@@ -5,6 +5,9 @@ namespace Modules\Menu\Http\Controllers\Backend;
 use App\Authorizable;
 use App\Http\Controllers\Backend\BackendBaseController;
 use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class MenusController extends BackendBaseController
 {
@@ -50,7 +53,7 @@ class MenusController extends BackendBaseController
         $$module_name_singular = $module_model::with([
             'items.children.children.children.children',
         ])->findOrFail($id);
-
+ 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
         return view(
@@ -132,5 +135,35 @@ class MenusController extends BackendBaseController
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
         return redirect()->route("backend.{$module_name}.show", $$module_name_singular->id);
+    }
+     public function upload(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => [
+                'required',
+                'file',
+                'max:20480',        // 20 MB — adjust as needed
+                // Block dangerous executables only
+                'mimes:jpg,jpeg,png,gif,webp,bmp,svg,'
+                    . 'mp4,webm,ogg,avi,mov,'
+                    . 'mp3,wav,aac,flac,'
+                    . 'pdf,doc,docx,xls,xlsx,ppt,pptx,'
+                    . 'txt,csv,json,xml,'
+                    . 'zip,rar,7z',
+            ],
+        ]);
+ 
+        $file     = $request->file('file');
+        $path     = $file->store('editor-uploads', 'public');
+        $url      = Storage::disk('public')->url($path);
+        $mimeType = $file->getMimeType();
+        $name     = $file->getClientOriginalName();
+ 
+        return response()->json([
+            'url'      => $url,       // Public URL — inserted into editor HTML
+            'name'     => $name,
+            'mimeType' => $mimeType,
+            'path'     => $path,      // Relative storage path (for reference)
+        ]);
     }
 }

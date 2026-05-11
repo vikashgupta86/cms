@@ -1,123 +1,153 @@
-<div>
-    <section class="bg-white dark:bg-gray-800">
-        <div class="mx-auto max-w-7xl px-4 py-24 text-center sm:px-12">
-            <div class="m-6 flex justify-center">
-                <img class="h-24 rounded-sm" src="{{ asset('img/logo-square.jpg') }}" alt="{{ app_name() }}" />
-            </div>
-            <h1
-                class="mb-6 text-4xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-6xl dark:text-white"
-            >
-                {{ app_name() }}
-            </h1>
-            <p class="mb-10 text-lg font-normal text-gray-500 sm:px-16 sm:text-2xl xl:px-48 dark:text-gray-400">
-                {!! setting('app_description') !!}
-            </p>
-            <div class="mb-8 flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 lg:mb-16">
-                <a
-                    class="inline-flex items-center justify-center rounded-lg bg-gray-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-gray-800 focus:ring-4 focus:ring-gray-300"
-                    href="https://github.com/nasirkhan/laravel-starter"
-                    target="_blank"
-                >
-                    <svg
-                        class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                            d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
-                        />
-                    </svg>
-                    <span class="ms-2">Github</span>
-                </a>
-                <a
-                    class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-800"
-                    href="https://nasirkhn.com"
-                    target="_blank"
-                >
-                    <svg
-                        class="icon icon-tabler icons-tabler-outline icon-tabler-world-www"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M19.5 7a9 9 0 0 0 -7.5 -4a8.991 8.991 0 0 0 -7.484 4" />
-                        <path d="M11.5 3a16.989 16.989 0 0 0 -1.826 4" />
-                        <path d="M12.5 3a16.989 16.989 0 0 1 1.828 4" />
-                        <path d="M19.5 17a9 9 0 0 1 -7.5 4a8.991 8.991 0 0 1 -7.484 -4" />
-                        <path d="M11.5 21a16.989 16.989 0 0 1 -1.826 -4" />
-                        <path d="M12.5 21a16.989 16.989 0 0 0 1.828 -4" />
-                        <path d="M2 10l1 4l1.5 -4l1.5 4l1 -4" />
-                        <path d="M17 10l1 4l1.5 -4l1.5 4l1 -4" />
-                        <path d="M9.5 10l1 4l1.5 -4l1.5 4l1 -4" />
-                    </svg>
-                    <span class="ms-2">Website</span>
-                </a>
+@extends('frontend.layouts.app')
+
+@section('title', "Home")
+
+@php
+    use Illuminate\Support\Str;
+
+    // Pre-resolve all cross-referenced sections once — avoids repeated collect() scans in the loop.
+    $sectionMap     = collect($sectionsData)->keyBy('section_type');
+
+    $sidebarSection = $sectionMap->get('sidebar_links');
+    $eventsSection  = $sectionMap->get('events');
+    $photoSection   = $sectionMap->get('photo_gallery');
+    $contact_us = $sectionMap->get('contact_us');
+    $map_section = $sectionMap->get('map');
+    $socialSection  = $sectionMap->get('social');
+
+    $sidebarItems   = $sidebarSection ? $sidebarSection['data'] : collect();
+     $socialItems    = $socialSection  ? $socialSection['data']  : collect();
+ 
+    $hasNewsSection = $sectionMap->has('news');
+@endphp
+ 
+@section('content')
+
+<section class="home-page">
+
+    @forelse ($sectionsData as $section)
+        @php $type = $section['section_type']; $data = $section['data']; @endphp
+
+        {{-- ── 1. ANNOUNCEMENT TICKER ── --}}
+        @if ($type === 'announcement')
+            @include('frontend.partial.announcement', ['items' => $data])
+
+        {{-- ── 2. BANNER ── --}}
+        @elseif ($type === 'banner')
+            @include('frontend.partial.banner', ['items' => $data])
+
+        {{-- ── 3. PORTAL / SERVICE ICONS ── --}}
+        @elseif ($type === 'portal')
+            @include('frontend.partial.portal', ['items' => $data])
+
+        {{-- ── 4. GOV ICONS MARQUEE ── --}}
+        @elseif ($type === 'gov_icons')
+            @include('frontend.partial.gov_icons', ['items' => $data])
+
+        {{-- ── 5. MINISTER / PM QUOTE ── --}}
+        @elseif ($type === 'minister')
+            @include('frontend.partial.pmquote', ['items' => $data])
+
+        {{-- ── 6. ABOUT ── --}}
+        @elseif ($type === 'about')
+            @include('frontend.partial.about', ['items' => $data])
+
+        {{-- ── 7. MINISTERS LIST ── --}}
+        @elseif ($type === 'ministers')
+            @include('frontend.partial.ministers', ['items' => $data])
+
+        {{-- ── 8. NEWS + SIDEBAR (rendered together) ── --}}
+        @elseif ($type === 'news')
+            @include('frontend.partial.news', [
+                'items'        => $data,
+                'sidebarItems' => $sidebarItems,
+                'sidebarTitle' => 'Portals',
+            ])
+
+        {{-- ── 9. SIDEBAR — standalone fallback (only when no news section) ── --}}
+        @elseif ($type === 'sidebar_links' && !$hasNewsSection)
+            <div class="container py-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-4">
+                        @include('frontend.partial.sidebar_links', [
+                            'items' => $data,
+                            'title' => 'Portals',
+                        ])
+                    </div>
+                </div>
             </div>
 
-            @include('frontend.includes.messages')
+        {{-- ── 10. DASHBOARD + EVENTS (rendered together) ── --}}
+        @elseif ($type === 'dashboard')
+            <div class="container py-5">
+                <div class="row">
+                    <div class="{{ $eventsSection ? 'col-md-6' : 'col-12' }}">
+                        @include('frontend.partial.dashboard', ['items' => $data])
+                    </div>
+
+                    @if ($eventsSection)
+                        <div class="col-md-6">
+                            @include('frontend.partial.events', ['items' => $eventsSection['data']])
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+        {{-- ── 11. EVENTS — skip; rendered alongside dashboard above ── --}}
+        @elseif ($type === 'events')
+            {{-- intentionally blank --}}
+
+        {{-- ── 12. VIDEO GALLERY + PHOTO GALLERY (rendered together) ── --}}
+        @elseif ($type === 'video_gallery')
+            <div class="container-fluid py-5" style="background:#1a3a6b;">
+                <div class="container">
+                    <div class="row">
+                        <div class="{{ $photoSection ? 'col-md-6' : 'col-12' }}">
+                            @include('frontend.partial.video_gallery', ['items' => $data])
+                        </div>
+
+                        @if ($photoSection)
+                            <div class="col-md-6">
+                                @include('frontend.partial.photo_gallery', ['items' => $photoSection['data']])
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+        {{-- ── 13. PHOTO GALLERY — skip; rendered alongside video gallery above ── --}}
+        @elseif ($type === 'photo_gallery')
+            {{-- intentionally blank --}}
+        @elseif ($type === 'contact_us')
+            {{-- @include('frontend.partial.contact_map', ['items' => $data]) --}}
+        @elseif ($type === 'map')
+            {{-- @include('frontend.partial.contact_map', ['items' => $data]) --}}
+
+        {{-- ── 14. SOCIAL — currently disabled ── --}}
+        @elseif ($type === 'social')
+            {{-- @include('frontend.partial.social', ['items' => $data]) --}}
+
+        {{-- ── 15. CONTACT / MAP — currently disabled ── --}}
+        @elseif ($type === 'contact_us')
+            {{-- @include('frontend.partial.contact_map', ['items' => $data]) --}}
+
+        {{-- ── 16. FOOTER LINKS ── --}}
+        @elseif ($type === 'footer_links')
+            @include('frontend.partial.footer_links', [
+                'items'        => $data,
+                 'map_section'  => $map_section,
+                'contact_us'   => $contact_us,
+                'socialItems'=>$socialItems,
+            ])
+
+        @endif
+
+    @empty
+        <div class="container py-4">
+            <div class="alert alert-warning">No homepage section found.</div>
         </div>
-    </section>
+    @endforelse
 
-    <section class="bg-gray-100 py-20 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
-        <div class="container mx-auto flex flex-col items-center justify-center px-5">
-            <div class="w-full text-center lg:w-2/3">
-                <h1 class="mb-4 text-3xl font-medium text-gray-800 sm:text-4xl dark:text-gray-200">
-                    {{ __('Screenshots of the project') }}
-                </h1>
+</section>
 
-                <p class="mb-8 leading-relaxed">
-                    In the following section we listed a number of screenshots of different parts of the project,
-                    Laravel Starter.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-gray-50 pb-20 dark:bg-gray-700">
-        <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
-            <div class="rounded-lg p-3 shadow-lg sm:p-10 dark:bg-gray-800">
-                <img
-                    loading="lazy"
-                    src="https://github.com/nasirkhan/laravel-starter/assets/396987/1cf5ce5a-f374-4bae-b5a3-69e8d7ff684d"
-                    alt="Page preview"
-                />
-            </div>
-            <div class="rounded-lg p-3 shadow-lg sm:p-10 dark:bg-gray-800">
-                <img
-                    loading="lazy"
-                    src="https://github.com/nasirkhan/laravel-starter/assets/396987/93341711-60dd-4624-8cd7-82f1c611287d"
-                    alt="Page preview"
-                />
-            </div>
-            <div class="rounded-lg p-3 shadow-lg sm:p-10 dark:bg-gray-800">
-                <img
-                    loading="lazy"
-                    src="https://github.com/nasirkhan/laravel-starter/assets/396987/0f6b8201-6f6a-429f-894b-4e491cc5eba4"
-                    alt="Page preview"
-                />
-            </div>
-            <div class="rounded-lg p-3 shadow-lg sm:p-10 dark:bg-gray-800">
-                <img
-                    loading="lazy"
-                    src="https://github.com/nasirkhan/laravel-starter/assets/396987/f8131011-2ecc-4a11-961f-85e02cb8f7a1"
-                    alt="Page preview"
-                />
-            </div>
-        </div>
-    </section>
-</div>
+@endsection

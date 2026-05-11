@@ -1,4 +1,8 @@
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 <div>
+
     {{-- Validation Summary --}}
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -55,8 +59,10 @@
                 <select wire:model="parent_id" class="form-select" wire:key="parent-{{ $menu_id }}" @if(!$menu_id) disabled @endif>
                     <option value="">-- No Parent (Root Level) --</option>
                     @if($menu_id)
-                        @forelse ($parent_items as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
+                        @forelse ($parent_items as $item)
+                            <option value="{{ $item['id'] }}" {{ $item['disabled'] ? 'disabled' : '' }}>
+                                {!! $item['prefix'] !!}{{ $item['name'] }}
+                            </option>
                         @empty
                             <option value="" disabled>No parent items available</option>
                         @endforelse
@@ -84,11 +90,14 @@
                 </label>
                 <select wire:model.live="type" class="form-select" required>
                     <option value="">-- Select Type --</option>
+                   
+                    {{-- <option value="divider">Divider</option>
+                    <option value="heading">Heading</option> --}}
+                    <option value="external">External Link</option>
+                    <option value="file">File</option>
+                    <option value="content">Content</option>
                     <option value="link">Link</option>
                     <option value="dropdown">Dropdown</option>
-                    <option value="divider">Divider</option>
-                    <option value="heading">Heading</option>
-                    <option value="external">External Link</option>
                 </select>
                 @error("type")
                     <span class="text-danger">{{ $message }}</span>
@@ -181,7 +190,101 @@
             </div>
         </div>
 
-        <div class="row">
+     
+{{-- File Icon Upload Field --}}
+<div class="row">
+    <div class="col-sm-6 col-12 mb-3">
+        <div class="form-group">
+            <label class="form-label">
+                Upload File Icon
+            </label>
+
+            <input type="file" wire:model="upload_file_icon" class="form-control">
+
+            @if($existingFileIcon)
+                <div class="mt-2">
+                    <small class="text-muted">Current icon:</small><br>
+
+                    <a href="{{ Storage::disk('public')->url($existingFileIcon) }}"
+                       target="_blank"
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-file-image"></i> View Current Icon
+                    </a>
+
+                    <small class="text-muted d-block mt-1">
+                        {{ basename($existingFileIcon) }}
+                    </small>
+
+                    <small class="text-muted">
+                        Upload a new icon above to replace it.
+                    </small>
+                </div>
+            @endif
+
+            @error('upload_file_icon')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+</div>
+
+{{-- File Upload Field --}}
+@if($type === 'file')
+    <div class="row">
+        <div class="col-sm-6 col-12 mb-3">
+            <div class="form-group">
+                <label class="form-label">
+                    Upload File @if(!$existingFile)<span class="text-danger">*</span>@endif
+                </label>
+
+                <input type="file" wire:model="upload_file" class="form-control">
+
+                @if($existingFile)
+                    <div class="mt-2">
+                        <small class="text-muted">Current file:</small><br>
+                        <a href="{{ Storage::disk('public')->url($existingFile) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-file"></i> View Current File
+                        </a>
+                        <small class="text-muted d-block mt-1">{{ basename($existingFile) }}</small>
+                        <small class="text-muted">Upload a new file above to replace it.</small>
+                    </div>
+                @endif
+
+                @error('upload_file')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+    </div>
+@endif
+
+        {{-- Content Editor --}}
+ @if($type === 'content')
+<div class="row">
+    <div class="col-12 mb-3">
+        <div class="form-group">
+            <label class="form-label">
+                Content Editor <span class="text-danger">*</span>
+            </label>
+
+            {{-- Hidden input that Livewire watches --}}
+            <input type="hidden" wire:model="content" id="content-hidden">
+
+            {{-- The visible editor (wire:ignore prevents Livewire from wiping it) --}}
+            <div wire:ignore>
+                <textarea id="content" class="form-control" rows="10"></textarea>
+            </div>
+
+            @error('content')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+</div>
+@endif
+        {{-- <div class="row">
             <div class="col-sm-6 col-12 mb-3">
                 <div class="form-group">
                     <label for="route_parameters" class="form-label">Route Parameters (JSON)</label>
@@ -211,11 +314,11 @@
                     @enderror
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endif
 
     {{-- Display Properties --}}
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-12 mb-3">
             <h5>Display Properties</h5>
         </div>
@@ -301,10 +404,10 @@
                 @enderror
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Access Control --}}
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-12 mb-3">
             <h5>Access Control</h5>
         </div>
@@ -336,7 +439,7 @@
                 @enderror
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Status & Visibility --}}
     <div class="row">
@@ -390,10 +493,6 @@
                 <select wire:model="locale" class="form-select">
                     <option value="">-- Select Language --</option>
                     <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="ar">Arabic</option>
                     <option value="hi">Hindi</option>
                 </select>
                 @error("locale")
@@ -417,11 +516,10 @@
                 @enderror
             </div>
         </div>
-
     </div>
 
     {{-- Additional Data & Notes --}}
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-sm-6 col-12 mb-3">
             <div class="form-group">
                 <label for="custom_data" class="form-label">Custom Data (JSON)</label>
@@ -451,7 +549,7 @@
                 @enderror
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Form Actions --}}
     <div class="row mt-4">
@@ -501,3 +599,4 @@
         </div>
     </div>
 </div>
+    

@@ -1,0 +1,12 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /cms/
+
+    # Skip if already pointing to public
+    RewriteCond %{REQUEST_URI} !^/cms/public/
+    
+    # Rewrite to public folder
+    RewriteRule ^(.*)$ /cms/public/$1 [L,QSA]
+</IfModule>

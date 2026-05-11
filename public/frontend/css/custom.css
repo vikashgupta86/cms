@@ -1,0 +1,129 @@
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-left: .1rem;
+}
+
+ 
+    .menu-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.menu-arrow {
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    transform: rotate(-90deg);
+    flex-shrink: 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+ 
+.ecp#calendar {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    min-height: 400px;
+}
+.fc-event {
+    cursor: pointer !important;
+    border: none !important;
+    min-height: 8px !important;
+    margin-bottom: 2px !important;
+}
+.fc-event-main {
+    padding: 2px 5px !important;
+    display: block !important;
+}
+.fc-event-title {
+    display: block !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    font-weight: 600 !important;
+    font-size: 0.85em !important;
+}
+@media (max-width: 767px) {
+    .ecp#calendar {
+        padding: 5px;
+        min-height: 300px;
+    }
+    .fc-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .fc-toolbar-title {
+        font-size: 1.2em !important;
+    }
+    .fc-event-title {
+        font-size: 0.75em !important;
+    }
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+}
+.fc-v-event .fc-event-title, .fc-h-event .fc-event-title {
+    color: inherit !important;
+}
+.fc-daygrid-event {
+    white-space: normal !important;
+    overflow: visible !important;
+}
+.fc-daygrid-event-harness {
+    margin-bottom: 2px !important;
+}
+.fc-daygrid-event-dot {
+    display: none !important;
+}
+#eventModal .modal-header {
+    background-color: #1f5692;
+    color: #ffffff;
+    border-bottom: none;
+}
+#eventModal .modal-title {
+    font-weight: 600;
+}
+#eventModal .btn-close {
+    filter: brightness(0) invert(1); 
+    opacity: 0.8;
+}
+#eventModal .btn-close:hover {
+    opacity: 1;
+}
+#eventModal .btn-primary-custom {
+    background-color: #1f5692;
+    border-color: #1f5692;
+    color: #ffffff;
+    padding: 8px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+#eventModal .btn-primary-custom:hover {
+    background-color: #164270;
+    border-color: #164270;
+    color: #ffffff;
+}
+#eventModal .modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+
+
+.cms-content table tr {
+    height: 0!important;
+
+}
+.cms-content table tr td {
+    color: #000!important;
+    
+}

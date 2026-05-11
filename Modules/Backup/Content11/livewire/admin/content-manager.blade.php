@@ -66,7 +66,7 @@
             <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl z-50">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                     <h3 class="text-base font-semibold text-gray-800">
-                        {{ $isEditing ? 'Edit Content' : 'Add New Content' }}
+                        {{ $isEditing ? 'Edit Content' : 'Add New Contents' }}
                     </h3>
                     <button wire:click="cancel" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>

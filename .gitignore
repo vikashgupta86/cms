@@ -20,6 +20,7 @@ yarn-error.log
 /.vscode
 *.cache
 /index.lock
+/Modules/Backup
 
 
 

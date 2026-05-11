@@ -85,12 +85,9 @@ return [
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     'available_locales' => [
-        'ar' => 'العربی (AR)',
-        'bn' => 'বাংলা (BN)',
+     
         'en' => 'English (EN)',
-        'fa' => 'فارسی (FA)',
-        'tr' => 'Türkçe (TR)',
-        'vi' => 'Vietnamese (VI)',
+         'hi'=>'Hindi'
     ],
 
     /*

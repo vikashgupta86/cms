@@ -13,7 +13,41 @@
             {{ html()->text($field_name)->placeholder($field_placeholder)->class("form-control")->attributes(["$required"]) }}
         </div>
     </div>
+<div class="mb-3">
+    <label for="body" class="form-label">Content</label>
 
+    <textarea name="body" id="body" class="form-control">
+        {{ old('body', $content->body ?? '') }}
+    </textarea>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    if (typeof tinymce === 'undefined') {
+        console.error('TinyMCE load nahi hua. CDN/API key issue hai.');
+        return;
+    }
+
+    tinymce.init({
+        selector: 'textarea#body',
+        height: 500,
+        menubar: 'file edit view insert format tools table help',
+
+        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | code preview fullscreen',
+
+        branding: false,
+        promotion: false,
+
+        content_style: 'body { font-family: Arial, sans-serif; font-size:14px }'
+    });
+
+});
+</script>
     <div class="col-12 col-sm-3 mb-3">
         <div class="form-group">
             <?php

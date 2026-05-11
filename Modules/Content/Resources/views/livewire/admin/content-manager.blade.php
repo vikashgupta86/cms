@@ -273,19 +273,21 @@
                             @error('published_at')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        {{-- Body --}}
+                        {{-- Content Editor --}}
                         @if($type === 'content')
                         <div class="col-12">
                             <label class="form-label fw-semibold">Body <span class="text-danger">*</span></label>
-                            <textarea wire:model="body" rows="12"
+                            <div class="mb-2">
+                                <small class="text-muted">Rich-text editor — HTML is fully supported. Use the toolbar above to format content.</small>
+                            </div>
+                            <textarea wire:model.defer="body" wire:ignore id="summernote-editor" rows="12"
                                       class="form-control @error('body') is-invalid @enderror"
-                                      placeholder="Enter HTML content…"></textarea>
+                                      placeholder="Enter HTML content…">{{ $body }}</textarea>
                             @error('body')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                            <small class="text-muted">HTML tags are supported.</small>
                         </div>
                         @endif
 
-                        {{-- File --}}
+                        {{-- File Upload --}}
                         @if($type === 'file')
                         <div class="col-12">
                             <label class="form-label fw-semibold">
@@ -367,3 +369,181 @@
     @endif
 
 </div>
+
+
+
+@push("after-styles")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet" />
+    <style>
+        .note-editor.note-frame :after {
+            display: none;
+        }
+
+        .note-editor .note-toolbar .note-dropdown-menu,
+        .note-popover .popover-content .note-dropdown-menu {
+            min-width: 180px;
+        }
+    </style>
+@endpush
+
+@push("after-scripts")
+    <script
+        type="module"
+        src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"
+    ></script>
+    <script type="module">
+        // Define function to open filemanager window
+        var lfm = function (options, cb) {
+            var route_prefix = options && options.prefix ? options.prefix : '/laravel-filemanager';
+            window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
+            window.SetUrl = cb;
+        };
+
+        // Define LFM summernote button
+        var LFMButton = function (context) {
+            var ui = $.summernote.ui;
+            var button = ui.button({
+                contents: '<i class="note-icon-picture"></i> ',
+                tooltip: 'Insert image with filemanager',
+                click: function () {
+                    lfm(
+                        {
+                            type: 'image',
+                            prefix: '/laravel-filemanager',
+                        },
+                        function (lfmItems, path) {
+                            lfmItems.forEach(function (lfmItem) {
+                                context.invoke('insertImage', lfmItem.url);
+                            });
+                        },
+                    );
+                },
+            });
+            return button.render();
+        };
+
+        // Initialize Summernote editor
+        function initSummernote() {
+            const $editor = $('#summernote-editor');
+
+            // Destroy existing instance if it exists
+            if ($editor.data('summernote')) {
+                $editor.summernote('destroy');
+            }
+
+            // Initialize Summernote
+            $editor.summernote({
+                height: 300,
+                minHeight: 200,
+                maxHeight: 500,
+                placeholder: 'Enter HTML content…',
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['fontname', 'fontsize', 'bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    ['color', ['forecolor', 'backcolor']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'lfm', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'undo', 'redo', 'help']],
+                ],
+                buttons: {
+                    lfm: LFMButton,
+                },
+                callbacks: {
+                    onChange: function(contents) {
+                        // Update Livewire model with editor content
+                        @this.set('body', contents);
+                    },
+                    onImageUpload: function(files) {
+                        // Handle image upload if needed
+                        for (let i = 0; i < files.length; i++) {
+                            sendFile(files[i], this);
+                        }
+                    }
+                }
+            });
+
+            // Set initial content
+            $editor.summernote('code', $editor.val());
+        }
+
+        // Initialize on document ready
+        $(document).ready(function() {
+            initSummernote();
+
+            // Reinitialize when modal is shown (for Livewire compatibility)
+            $(document).on('shown.bs.modal', '.modal', function() {
+                if ($('#summernote-editor').length) {
+                    setTimeout(initSummernote, 100);
+                }
+            });
+        });
+
+        // Handle Livewire updates
+        document.addEventListener('livewire:updated', function() {
+            if ($('#summernote-editor').length) {
+                initSummernote();
+            }
+        });
+    </script>
+
+    <script type="module" src="{{ asset("vendor/laravel-filemanager/js/stand-alone-button.js") }}"></script>
+    <script type="module">
+        $('#button-image').filemanager('image');
+    </script>
+
+    <!-- Select2 Library -->
+    <x-library.select2 />
+    <script type="module">
+        $(document).ready(function () {
+            $(document).on('select2:open', () => {
+                document.querySelector('.select2-search__field').focus();
+                document.querySelector('.select2-container--open .select2-search__field').focus();
+            });
+
+            $('.select2-category').select2({
+                theme: 'bootstrap-5',
+                placeholder: '@lang("Select an option")',
+                minimumInputLength: 2,
+                allowClear: true,
+                ajax: {
+                    url: '{{ route("backend.categories.index_list") }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term),
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data,
+                        };
+                    },
+                    cache: true,
+                },
+            });
+
+            $('.select2-tags').select2({
+                theme: 'bootstrap-5',
+                placeholder: '@lang("Select an option")',
+                minimumInputLength: 2,
+                allowClear: true,
+                ajax: {
+                    url: '{{ route("backend.tags.index_list") }}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term),
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data,
+                        };
+                    },
+                    cache: true,
+                },
+            });
+        });
+    </script>
+@endpush
