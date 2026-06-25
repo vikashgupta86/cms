@@ -17,7 +17,7 @@
 @endphp
 
 @if($processedMenus->isNotEmpty())
-    <ul class="{{ $cssClass }}">
+    <ul class="{{ $cssClass }}"@if($location === 'frontend-header') id="bee-main-nav-ul"@endif>
         @foreach($processedMenus as $menu)
             @if($menu->hierarchicalItems && $menu->hierarchicalItems->isNotEmpty())
                 @foreach($menu->hierarchicalItems as $menuItem)

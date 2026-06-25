@@ -75,9 +75,11 @@ class UserTableSeeder extends Seeder
         ];
 
         foreach ($users as $user_data) {
-            $user = User::create($user_data);
+            $user = User::updateOrCreate(['id' => $user_data['id']], $user_data);
 
-            event(new UserCreated($user));
+            if ($user->wasRecentlyCreated) {
+                event(new UserCreated($user));
+            }
         }
     }
 }

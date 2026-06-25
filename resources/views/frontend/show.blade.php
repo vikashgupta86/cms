@@ -22,10 +22,51 @@
                     <span>{{ $content->name }}</span>
                 </li>
             </ul>
+
+            @php
+                // 👇 If your column isn't called "image", just change this one line
+                $bgImage = $content->image ?? null;
+
+                $jumboStyle = $bgImage
+                    ? "background-image: url('" . asset($bgImage) . "');"
+                    : "background-color: #034903;";
+            @endphp
+
+            <div class="container-fluid" id="jumbo" style="
+                {{ $jumboStyle }}
+                width: 100%;
+                padding: 20px !important;
+                background-size: cover;
+                background-position: center;
+            ">
+                <div class="row align-items-center justify-content-center" style="height: 250px">
+                    <div class="col-md-2" style="
+                                height: 230px;
+                                width: 70px;
+
+                                border-top: 10px solid white;
+                                border-bottom: 10px solid white;
+                                border-left: 10px solid white;
+                            "></div>
+                    <div class="col-md-10 my-auto" style="
+                                background-color: rgba(3, 73, 3, 0.6);
+                                padding: 20px;
+                                margin-left: -20px;
+                            ">
+                        <h2 class="animated slideInDown" style="color: orangered;font-weight:700">
+                            {{ $content->meta_title ?? $content->name }}
+                        </h2>
+                        <h3 class="display-5 animated slideInDown" style="color: white">
+                            {{ $content->name }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
 
                 {{-- LEFT SIDEBAR --}}
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <ul class="sidebar-links">
 
                         @foreach($children as $child)
@@ -53,7 +94,7 @@
                         @endforeach
 
                     </ul>
-                </div>
+                </div> -->
 
                 {{-- RIGHT CONTENT --}}
                 <div class="col-md-9">

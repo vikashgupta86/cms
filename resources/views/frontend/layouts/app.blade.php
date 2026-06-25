@@ -23,25 +23,37 @@
         @livewireStyles
 
         @stack("after-styles")
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('frontend/images/ayush.png') }}" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" /> -->
-        <link rel="stylesheet" href="{{ asset('frontend/lib/font-awesome/css/all.css') }}" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pk3a/8y..." crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+
         <link rel="stylesheet" href="{{ asset('frontend/lib/animate/animate.min.css') }}" />
         <link rel="stylesheet" href="{{ asset('frontend/lib/owlcarousel/assets/owl.carousel.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('frontend/css/mmenu.css') }}" />
+        <link rel="stylesheet" href="{{ asset('frontend/css/mmenu.positioning.css') }}" />
         <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('frontend/lib/accessibility/style.css') }}" />
+        <link rel="stylesheet" href="{{ asset('frontend/assets/bootstrap.css') }}" />
         <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" />
         <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}" />
-        <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
-        <link rel="stylesheet" href="{{ asset('frontend/lib/owlcarousel/assets/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ asset('frontend/lib/owlcarousel/assets/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('frontend/css/enhanced-ui.css') }}" />
+        <link rel="stylesheet" href="{{ asset('frontend/lib/owlcarousel/assets/owl.theme.default.min.css') }}" />
 
-<script src="{{ asset('frontend/lib/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('frontend/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+        <!-- Missing UI files (not present in public path): -->
+        <!-- public/frontend/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css -->
+        <!-- public/mysatyle.css -->
+        <!-- public/style.css -->
+        <!-- public/mapdata.js -->
+        <!-- public/countrymap.js -->
+
+        <!-- Existing scripts still used by frontend template -->
+        <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('frontend/lib/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('frontend/lib/owlcarousel/owl.carousel.min.js') }}"></script>
         <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
         <x-google-analytics />

@@ -11,7 +11,7 @@ class HomeController extends Controller
   public function home()
 {
     $homeSections = ManageHomePage::where("status", 1)->where('deleted_at', null)
-        ->orderBy('menu_order','ASC')
+        // ->orderBy('menu_order','ASC')
         ->get();
  
 //  dd($homeSections);
